@@ -81,8 +81,14 @@ function GenerateMessage{
   $resp += "Connection: Keep Alive" + $crlf
   $resp += "Content-Type: text/html; charset=utf-8" + $crlf + $crlf
   
-  $resp += gc (join-path $homedir $file)
-  return $resp;
+  if($file.endswith(".ps1")){
+    $resp += ParsePS2File (join-path $homedir $file) (Get-Param($uri))
+  }
+  else{
+    $resp += gc (join-path $homedir $file) # plain text file: html, js...
+  }
+  
+  return $resp
 }
 
 function Get-FilePath{
@@ -96,4 +102,24 @@ function Get-Param{
   param([string]$uri)
   
   return $uri.split('?')[1]
+}
+
+function ParsePS2File{
+  param(
+  [string]$file,
+  [string]$params
+  )
+  
+  # get all GET parameters into dict
+  $getparams = @{}
+  if($params -ne ""){
+    $params.split('&') | %{
+      $pair = $_.split('=')
+      $getparams.add($pair[0],$pair[1])
+    }
+  }
+  
+  $a = & $file $getparams
+  
+  return $a  
 }
