@@ -10,116 +10,150 @@ $notfoundpage = @"
 </html>
 "@
 
-function GenerateMessage{
-  param(
-  [string]$req_msg
-  )
+$CR = [char]13
+$LF = [char]10
+$CRLF = [char]13 + [char]10
+$SP = [char]32
+
+# return hash
+function ParseReqMsg{
+  param( [string]$req_msg )
   
-  if($req_msg -eq "" -or $req_msg -eq $null) {
-    write-host "request is blank" -fore yellow
-    return ""
+  $req = @{}
+  
+  $lines = $req_msg.split($LF)  
+  $splitter = (0..($lines.length-1)) | %{ if($lines[$_] -eq $CR){ return $_ } }
+  
+  $head = $lines[0..($splitter-1)]
+  $body = $lines[($splitter+1)..($lines.length-1)] -join ''
+    
+  $req_line = $head[0]
+  $req.add("Method",$req_line.trim().split($SP)[0])
+  $req.add("Req-URI",$req_line.trim().split($SP)[1])
+  $req.add("HTTP-Version",$req_line.trim().split($SP)[2])
+  
+  $head[1..($head.length-1)] | %{
+    $first_colon = $_.indexof(':')
+    $req.add($_.substring(0,$first_colon), $_.substring($first_colon + 1).trim())
   }
   
-  $first_line = $req_msg.split([char]13)[0]
-  write-host "first line" $first_line -fore yellow
+  $req.add("Body",$body)
+  $req
+}
+
+function ValidateReqHash{
+  param($req_hash = @{})  
+  if($req_hash["Req-URI"]) {return $true}
   
-  $method = $first_line.split([char]32)[0]
-  $uri = $first_line.split([char]32)[1]
-  $protocol = $first_line.split([char]32)[2]
-  write-host "method:" $method
-  write-host "uri:" $uri
-  write-host "protocol:" $protocol
+  return $false
+}
+
+function GenerateMessage{
+  param( [string]$req_msg )
+  
+  if(-not $req_msg) { write-host "request is blank" -fore yellow; return }
+  
+  $req = ParseReqMsg $req_msg
+  $req >> $DSHOME\debug.txt
+  #if(-not (ValidateReqHash $req)){ write-host "invalid req hash" -fore red; return }  
+  
+  # add body as params (post)
+  if($req["Body"]){
+    $req["Body"].split('&') | %{
+      $global:DSPARAMS[($_.split('=')[0])] = $_.split('=')[1]
+    }
+  }
+  
+  # add params from uri (get)
+  $get_p = Get-Param $req["Req-URI"]
+  if($get_p){
+    $get_p.split('&') | %{
+      $global:DSPARAMS[($_.split('=')[0])] = $_.split('=')[1]
+    }
+  }
   
   #return ""
   
-  $homedir = "C:\dshome"
-  $crlf = [char]13 + [char]10
-  
-  $resp = ""
-  
-  if($uri -eq "/") {
-    # redirect to /default.html
-    write-host "redirect to default page" -fore yellow
-
-    $resp = "HTTP/1.1 301 Moved Permanently" + $crlf
-    $resp += "Server: dave's server/0.0.1" + $crlf
-    $resp += "Location: /default.html" + $crlf + $crlf
-
-    $resp += "Redirecting..." + $crlf + $crlf
-
-    return $resp
+  #######################################
+  write-host "method=" $req["Method"]
+  write-host "req-uri=" $req["Req-URI"]
+     
+  # 'GET /', redirect to default
+  if($req["method"] -eq "GET" -and $req["req-uri"] -eq "/") {
+    $resp = "HTTP/1.1 301 Moved Permanently" + $CRLF
+    $resp += "Location: /default.html" + $CRLF + $CRLF
+    return $resp,0
   }
   
-  $file = Get-FilePath($uri)
+  $file = Get-FilePath($req["req-uri"])
   
-  if(-not (Test-Path (join-path $homedir $file))){
-    # 404
-    write-host "cannot find" (join-path $homedir $file) -fore red
+  # 404
+  if(-not (Test-Path (join-path $DSHOME $file))){
+    write-host "cannot find" (join-path $DSHOME $file) -fore red
     
-    $resp = "HTTP/1.1 404 Not Found" + $crlf
-    $resp += "Server: dave's server/0.0.1" + $crlf
-    $resp += "Status: 404 Not Found" + $crlf
-    $resp += "Connection: Keep Alive" + $crlf
-    $resp += "Content-Type: text/html; charset=utf-8" + $crlf + $crlf
+    $resp = "HTTP/1.1 404 Not Found" + $CRLF
+    $resp += "Status: 404 Not Found" + $CRLF
+    $resp += "Content-Type: text/html; charset=utf-8" + $CRLF
     
-    if(Test-Path (join-path $homedir '404.html')){
-      $resp += gc (join-path $homedir '404.html')
+    if(Test-Path (join-path $DSHOME '404.html')){      
+      $resp += $CRLF
+      $content = gc (join-path $DSHOME '404.html')
+      $resp += $content      
     }
     else{
+      $resp += $CRLF
       $resp += $notfoundpage
     }
-    
     return $resp
   }
   
   # 200 OK
-  write-host "200 OK" (join-path $homedir $file) -fore green
+  write-host "200 OK" (join-path $DSHOME $file) -fore green
   
-  $resp = "HTTP/1.1 200 OK" + $crlf
-  $resp += "Server: dave's server/0.0.1" + $crlf
-  $resp += "Status: 200 OK" + $crlf
-  $resp += "Connection: Keep Alive" + $crlf
-  $resp += "Content-Type: text/html; charset=utf-8" + $crlf + $crlf
+  $resp = "HTTP/1.1 200 OK" + $CRLF
+  $resp += "Status: 200 OK" + $CRLF
+  $resp += "Content-Type: text/html; charset=utf-8" + $CRLF
   
-  if($file.endswith(".ps1")){
-    $resp += ParsePS2File (join-path $homedir $file) (Get-Param($uri))
+  if($file.endswith(".ps1")){    
+    $content = ParsePS1File (join-path $DSHOME $file)
+    $resp += $CRLF
+    $resp += $content
+  }
+  elseif($file.endswith(".ps2")){    
+    $content = ParsePS2File (join-path $DSHOME $file)
+    $resp += $CRLF
+    $resp += $content
   }
   else{
-    $resp += gc (join-path $homedir $file) # plain text file: html, js...
-  }
-  
+    $content = gc (join-path $DSHOME $file) # plain text-based file: html, js...
+    $resp += $CRLF
+    $resp += $content
+  }  
   return $resp
 }
 
 function Get-FilePath{
-  param([string]$uri)
-  
+  param( [string]$uri )  
   # input uri should be like '/abc/abc/abc.xxx'  
-  return $uri.split('?')[0].replace('/','\')
+  $uri.split('?')[0].replace('/','\')
 }
 
+# get Get params
 function Get-Param{
-  param([string]$uri)
-  
-  return $uri.split('?')[1]
+  param( [string]$uri )  
+  $uri.split('?')[1]
 }
 
+function ParsePS1File{
+  param([string]$file)  
+  $a = & $file $global:DSPARAMS
+  return $a  
+}
+
+# TODO: ps2 file
 function ParsePS2File{
-  param(
-  [string]$file,
-  [string]$params
-  )
+  param([string]$file)
   
-  # get all GET parameters into dict
-  $getparams = @{}
-  if($params -ne ""){
-    $params.split('&') | %{
-      $pair = $_.split('=')
-      $getparams.add($pair[0],$pair[1])
-    }
-  }
-  
-  $a = & $file $getparams
-  
+  $a = & $file $global:DSPARAMS  
   return $a  
 }
