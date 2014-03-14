@@ -1,22 +1,19 @@
-param($GET = @{})
-
-$title = $GET['mytitle']
-$myh1 = $GET['myh1']
+param($params = @{})
 
 $x= @"
 <!doctype html>
 <html>
 <head>
-<title>$title</title>
+<title>Test POST</title>
 <head>
 <body>
-  <h1>$myh1</h1>
+  <h1>Test POST</h1>
   <h2>Can you believe it?</h2>
   <ul>
 "@ +(
     (
-      (1..10) | %{
-        "<li>$_</li>"
+      $params.keys | %{
+        "<li> $_ => "+ $params[$_] +"</li>"
       }
     ) -join ''
   )+ @"
