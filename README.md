@@ -3,15 +3,28 @@ ds
 
 Dave's simple HTTP server written in PowerShell
 
+Core files:
+ - ds.ps1 (tcp listener)
+ - ds_lib.ps1 (req - resp parsing)
+
+Sample files:
+ - hello.html and sample.ps1 => testing POST
+ - sample.ps2 => PowerShell-embedded HTML
+
+Functions:
+ - host normal static html pages (plus their assets like .js and .css)
+ - host HTML-embedded PowerShell (.ps1) pages; actually any PowerShell file which can generate HTML code
+ - host PowerShell-embedded HTML (.ps2) pages; its syntax is like PHP's. please refer to 'sample.ps2'
+
 ==
 
 Usage:
 
-To Start server:
+ - To Start server:
 
-PS> .\ds.ps1 [port]
+`PS> .\ds.ps1 [port]`
 
-To Stop server:
+ - To Stop server:
 
 just shut down that PowerShell session/window.
 
@@ -25,7 +38,8 @@ Related Parameters:
 3. Customized 404 html page
    C:\dshome\404.html, you can DIY.
 
-NOTE:
-1. refer to sample .ps1 file to write back-end code for web site
+==
 
-2. still in progress
+You can change everything because they are written with scripts
+
+
