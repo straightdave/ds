@@ -24,3 +24,7 @@ Related Parameters:
    Default is C:\dshome, you can change it in ds_lib.ps1
 3. Customized 404 html page
    C:\dshome\404.html, you can DIY.
+
+NOTE:
+1. refer to sample .ps1 file to write back-end code for web site
+2. still in progress
