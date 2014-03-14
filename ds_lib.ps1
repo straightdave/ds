@@ -150,10 +150,31 @@ function ParsePS1File{
   return $a  
 }
 
-# TODO: ps2 file
 function ParsePS2File{
   param([string]$file)
-  
-  $a = & $file $global:DSPARAMS  
-  return $a  
+
+  $content = [io.file]::readalltext($file)
+  $allmatch_equ = $content | select-string '(?ims)<\$[=](.*?)\$>' -allmatches | %{$_.matches} | %{$_.value}
+  $allmatch_noneequ = $content | select-string '(?ims)<\$[^=](.*?)\$>' -allmatches | %{$_.matches} | %{$_.value}
+
+  $comms = 
+  ($allmatch_noneequ | %{
+    $_.trimstart("<$").trimend("$>").trim()
+  }) -join ';'
+  invoke-expression $comms
+
+  $kvs = @{}
+  $allmatch_equ | %{
+    $c = $_.trimstart("<$=").trimend("$>").trim()    
+    $value = invoke-expression $c    
+    if($value -and $value.gettype().basetype.name -eq 'array'){
+      $kvs[$_] = ($value -join '')  
+    }else{
+      $kvs[$_] = $value
+    }
+  }
+
+  $page = $content -replace '(?ims)<\$[^=](.*?)\$>', ''
+  $kvs.keys | %{ $page = $page.replace( $_, $kvs[$_]) }
+  $page
 }
