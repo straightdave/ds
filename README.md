@@ -3,6 +3,8 @@ ds
 
 Dave's simple HTTP server written in PowerShell
 
+(Note: ds-v2 is undergoing. In v2 it will have multi-threads---real threads, not background jobs---to pick up tcp connections)
+
 Core files:
  - ds.ps1 (tcp listener)
  - ds_lib.ps1 (req - resp parsing)
