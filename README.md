@@ -3,7 +3,7 @@ ds
 
 Dave's simple HTTP server written in PowerShell
 
-(Note: ds-v2 is undergoing. In v2 it will have multi-threads---real threads, not background jobs---to pick up tcp connections)
+Note: for higher performance please use ds-v2 which is a multi-thread edition. It saves 90% time per connection.
 
 Core files:
  - ds.ps1 (tcp listener)
