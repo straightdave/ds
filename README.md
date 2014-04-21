@@ -15,7 +15,7 @@ Sample files:
 
 Functions:
  - host normal static html pages (plus their assets like .js and .css)
- - host HTML-embedded PowerShell (.ps1) pages; actually any PowerShell file which can generate HTML code
+ - run PowerShell (.ps1) as CGI-like applications; actually any PowerShell file which can generate HTML response
  - host PowerShell-embedded HTML (.ps2) pages; its syntax is like PHP's. please refer to 'sample.ps2'
 
 ==
