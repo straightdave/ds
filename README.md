@@ -1,26 +1,25 @@
 ds
 ==
 
-Dave's simple HTTP server written in PowerShell
+Dave's simple HTTP server written in PowerShell.
+ds enable you to write CGI-like local scripts and PowerShell-embedded HTML (like ERB or PHP file).
 
 Note: for higher performance please use ds-v2 which is a multi-thread edition. It saves 90% time per connection.
 
-Core files:
+## Core files:
  - ds.ps1 (tcp listener)
  - ds_lib.ps1 (req - resp parsing)
 
-Sample files:
+## Sample files:
  - hello.html and sample.ps1 => testing POST
  - sample.ps2 => PowerShell-embedded HTML
 
-Functions:
+## Functions:
  - host normal static html pages (plus their assets like .js and .css)
  - run PowerShell (.ps1) as CGI-like applications; actually any PowerShell file which can generate HTML response
  - host PowerShell-embedded HTML (.ps2) pages; its syntax is like PHP's. please refer to 'sample.ps2'
 
-==
-
-Usage:
+## Usage:
 
  - To Start server:
 
