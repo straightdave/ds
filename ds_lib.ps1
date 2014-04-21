@@ -92,7 +92,6 @@ function GenerateMessage{
     write-host "cannot find" (join-path $DSHOME $file) -fore red
     
     $resp = "HTTP/1.1 404 Not Found" + $CRLF
-    $resp += "Status: 404 Not Found" + $CRLF
     $resp += "Content-Type: text/html; charset=utf-8" + $CRLF
     
     if(Test-Path (join-path $DSHOME '404.html')){      
@@ -111,7 +110,6 @@ function GenerateMessage{
   write-host "200 OK" (join-path $DSHOME $file) -fore green
   
   $resp = "HTTP/1.1 200 OK" + $CRLF
-  $resp += "Status: 200 OK" + $CRLF
   $resp += "Content-Type: text/html; charset=utf-8" + $CRLF
   
   if($file.endswith(".ps1")){    
