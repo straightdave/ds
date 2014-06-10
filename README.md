@@ -1,50 +1,26 @@
 ds
 ==
+## Description
+  '__ds__' is a simple HTTP server written in pure PowerShell. The purpose of 'ds' is to host pages or simple Web application on the Windows machines without IIS and other heavy peripherals. Furthermore, 'ds' enables users to write [__EPS__](http://straightdave.github.io/eps) (PowerShell-embedded) HTML like erb or PHP files and render dynamic web pages with PowerShell.
 
-Dave's simple HTTP server written in PowerShell.
-ds enable you to write CGI-like local scripts and PowerShell-embedded HTML (like ERB or PHP file).
 
-Note: for higher performance please use ds-v2 which is a multi-thread edition. It saves 90% time per connection.
-
-## Core files:
+## Core file list
  - ds.ps1 (tcp listener)
  - ds_lib.ps1 (req - resp parsing)
-
-## Sample files:
- - hello.html and sample.ps1 => testing POST
- - sample.ps2 => PowerShell-embedded HTML
-
-## Functions:
- - host normal static html pages (plus their assets like .js and .css)
- - run PowerShell (.ps1) as CGI-like applications; actually any PowerShell file which can generate HTML response
- - host PowerShell-embedded HTML (.ps2) pages; its syntax is like PHP's. please refer to 'sample.ps2'
+ - eps.ps1 (EPS lib)
 
 ## Usage:
+Start server:
+```powershell
+PS> .\ds.ps1 [port]
+```
 
- - To Start server:
+Stop server:
+just shut down the PowerShell session/window.
 
-`PS> .\ds.ps1 [port]`
+## Note
+ - To solve the security warning when running scripts, try "set-executionpolicy bypass" which is easiest way.
 
- - To Stop server:
-
-just shut down that PowerShell session/window.
-
-
-Related Parameters:
-
-1. port
-   Default port is 8889. You can change it in ds.ps1
-2. home dir
-   Default is C:\dshome, you can change it in ds_lib.ps1
-3. Customized 404 html page
-   C:\dshome\404.html, you can DIY.
-
-==
-
-You can change everything because they are written with scripts
-
-P.S.
- - to solve the security warning when running scripts, try "set-executionpolicy bypass" which is easiest way.
-
-==
-test: forking and sending requests.
+## Contribute
+Please feel free to test and bug reports are welcomed very much.
+Author email: eyaswoo@163.com
