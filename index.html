@@ -1,112 +1,81 @@
-<!doctype html>
-<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
-<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Ds by straightdave</title>
+  </head>
 
-  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
-  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script type="text/javascript" src="javascripts/script.js"></script>
-
-  <title>Ds</title>
-  <meta name="description" content="Dave&#39;s simple HTTP server written in PowerShell">
-
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
-</head>
-
-<body>
-
-  <div class="wrapper">
-    <header>
-      <h1 class="title">Ds</h1>
-    </header>
+  <body>
     <div id="container">
-      <p class="tagline">Dave&#39;s simple HTTP server written in PowerShell</p>
-      <div id="main" role="main">
-        <div class="download-bar">
-        <div class="inner">
-          <a href="https://github.com/straightdave/ds/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/straightdave/ds/zipball/master" class="download-button zip"><span>Download</span></a>
-          <a href="https://github.com/straightdave/ds" class="code">View Ds on GitHub</a>
-        </div>
-        <span class="blc"></span><span class="trc"></span>
-        </div>
-        <article class="markdown-body">
+      <div class="inner">
+
+        <header>
+          <h1>Ds</h1>
+          <h2>A simple HTTP server written in PowerShell</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/straightdave/ds/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/straightdave/ds/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/straightdave/ds" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
           <h1>
 <a name="ds" class="anchor" href="#ds"><span class="octicon octicon-link"></span></a>ds</h1>
 
-<p>Dave's simple HTTP server written in PowerShell</p>
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
 
-<p>Core files:</p>
+<p>'<strong>ds</strong>' is a simple HTTP server written in pure PowerShell. The purpose of 'ds' is to host pages or simple Web application on the Windows machines without IIS and other heavy peripherals. Furthermore, 'ds' enables users to write <a href="http://straightdave.github.io/eps"><strong>EPS</strong></a> (PowerShell-embedded) HTML like erb or PHP files and render dynamic web pages with PowerShell.</p>
+
+<h2>
+<a name="core-file-list" class="anchor" href="#core-file-list"><span class="octicon octicon-link"></span></a>Core file list</h2>
 
 <ul>
 <li>ds.ps1 (tcp listener)</li>
 <li>ds_lib.ps1 (req - resp parsing)</li>
-</ul><p>Sample files:</p>
+<li>eps.ps1 (EPS lib)</li>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage:</h2>
+
+<p>Start server:</p>
+
+<div class="highlight highlight-powershell"><pre><span class="n">PS</span><span class="p">&gt;</span> <span class="p">.\</span><span class="n">ds</span><span class="p">.</span><span class="n">ps1</span> <span class="no">[port]</span>
+</pre></div>
+
+<p>Stop server:
+just shut down the PowerShell session/window.</p>
+
+<h2>
+<a name="note" class="anchor" href="#note"><span class="octicon octicon-link"></span></a>Note</h2>
 
 <ul>
-<li>hello.html and sample.ps1 =&gt; testing POST</li>
-<li>sample.ps2 =&gt; PowerShell-embedded HTML</li>
-</ul><p>Functions:</p>
+<li>To solve the security warning when running scripts, try "set-executionpolicy bypass" which is easiest way.</li>
+</ul><h2>
+<a name="contribute" class="anchor" href="#contribute"><span class="octicon octicon-link"></span></a>Contribute</h2>
 
-<ul>
-<li>host normal static html pages (plus their assets like .js and .css)</li>
-<li>host HTML-embedded PowerShell (.ps1) pages; actually any PowerShell file which can generate HTML code</li>
-<li>host PowerShell-embedded HTML (.ps2) pages; its syntax is like PHP's. please refer to 'sample.ps2'</li>
-</ul><h1></h1>
+<p>Please feel free to test and bug reports are welcomed very much.
+Author email: <a href="mailto:eyaswoo@163.com">eyaswoo@163.com</a></p>
+        </section>
 
-<p>Usage:</p>
+        <footer>
+          Ds is maintained by <a href="https://github.com/straightdave">straightdave</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
 
-<ul>
-<li>To Start server:</li>
-</ul><p><code>PS&gt; .\ds.ps1 [port]</code></p>
-
-<ul>
-<li>To Stop server:</li>
-</ul><p>just shut down that PowerShell session/window.</p>
-
-<p>Related Parameters:</p>
-
-<ol>
-<li>port
-Default port is 8889. You can change it in ds.ps1</li>
-<li>home dir
-Default is C:\dshome, you can change it in ds_lib.ps1</li>
-<li>Customized 404 html page
-C:\dshome\404.html, you can DIY.</li>
-</ol><h1></h1>
-
-<p>You can change everything because they are written with scripts</p>
-
-<p>P.S.</p>
-
-<ul>
-<li>to solve the security warning when running scripts, try "set-executionpolicy bypass" which is easiest way.</li>
-</ul>
-        </article>
+        
       </div>
     </div>
-    <footer>
-      <div class="owner">
-      <p><a href="https://github.com/straightdave" class="avatar"><img src="https://2.gravatar.com/avatar/bf929bcaf795524e94b28227f6c2efd0?d=https%3A%2F%2Fidenticons.github.com%2F6e8766f053e78781f8bcf4ae00839f93.png&amp;r=x&amp;s=60" width="48" height="48"/></a> <a href="https://github.com/straightdave">straightdave</a> maintains <a href="https://github.com/straightdave/ds">Ds</a></p>
-
-
-      </div>
-      <div class="creds">
-        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br/>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
-      </div>
-    </footer>
-  </div>
-  <div class="current-section">
-    <a href="#top">Scroll to top</a>
-    <a href="https://github.com/straightdave/ds/tarball/master" class="tar">tar</a><a href="https://github.com/straightdave/ds/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
-    <p class="name"></p>
-  </div>
-
-  
-</body>
+  </body>
 </html>
